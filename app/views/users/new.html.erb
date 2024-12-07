@@ -1,0 +1,47 @@
+<h1 class="text-center font-bold mb-2">Nuevo Usuario</h1>
+
+<div class="flex justify-center items-center min-h-screen ">
+
+    <%= form_with model: @user, html: { style: "width:50%; border: solid 1px black; border-radius:30px; padding:20px;"} do |form| %>
+    
+        <div class="mb-2">
+            <%= form.label :username, "Nombre de Usuario", class: "block text-sm font-medium text-gray-900 mb-2" %>
+            <%= form.text_field :username, placeholder: "Ingrese el nombre de usuario", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2."%>
+            <% @user.errors.full_messages_for(:username).each do |message| %>
+                <div><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :email, "Correo electrónico", class: "mb-2 block text-sm font-medium text-gray-900" %>
+            <%= form.email_field :email, placeholder: "Ingrese el correo electrónico", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+            <% @user.errors.full_messages_for(:email).each do |message| %>
+            <div><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :phone, "Número de Teléfono", class: "mb-2 block text-sm font-medium text-gray-900"%>
+            <%= form.telephone_field :phone, placeholder: "Ingrese el número de teléfono", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+            <% @user.errors.full_messages_for(:phone).each do |message| %>
+            <div><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :password_digest, "Contraseña", class: "mb-2 block text-sm font-medium text-gray-900"%>
+            <%= form.password_field :password_field, placeholder: "Ingrese la contraseña", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+        </div>
+
+        <div class="mb-2" >
+            <%= form.label :role, "Selecciona un rol", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { prompt: "Selecciona un rol" }, class:"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" %>
+        </div>
+
+        <div class="flex justify-center" >
+            <%= form.submit "Crear Usuario", class: "bg-rosa-light text-white rounded-full
+            hover:bg-opacity-90 transition duration-300 ease-in-out 
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rosa-light w-1/2 mt-6" %>
+        </div>
+    <% end %>
+</div>

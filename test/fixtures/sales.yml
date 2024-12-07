@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sale_datetime: 2024-12-06 15:24:21
+  total: 9.99
+  user: one
+  customer: MyString
+
+two:
+  sale_datetime: 2024-12-06 15:24:21
+  total: 9.99
+  user: two
+  customer: MyString
