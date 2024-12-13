@@ -1,0 +1,243 @@
+<div class="container mx-auto p-4">
+  <h1 class="font-bold text-3xl text-center mb-6">Nueva Venta</h1>
+
+  <div class="flex items-center mb-4">
+        <select id="product-select" 
+            class="w-full p-2 border rounded product-select mr-2">
+          <option value="">Seleccionar Producto</option>
+          <% @products.each do |product| %>
+          <option value="<%= product.id %>" 
+                data-details="<%= {
+                  id: product.id, 
+                  name: product.name, 
+                  price: product.unit_price, 
+                  stock: product.stock, 
+                  color: product.color.name, 
+                  size: product.size, 
+                  image: product.images.first.present? ? rails_blob_path(product.images.first, only_path: true) : ''
+                }.to_json %>">
+          <%= product.name_with_details %>
+          </option>
+          <% end %>
+      </select>
+    
+    <button 
+      type="button" 
+      class="add-product-btn bg-green-500 text-white px-4 py-2 rounded"
+    >
+      Agregar Producto
+    </button>
+  </div>
+
+  <%= form_with(model: @sale, local: true, data: { turbo: false} , class: 'sale-form') do |f| %>
+    <table class="w-full text-sm text-left text-gray-500 sale-items-table">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th class="px-6 py-3">Imagen</th>
+          <th class="px-6 py-3">Nombre</th>
+          <th class="px-6 py-3">Precio</th>
+          <th class="px-6 py-3">Stock</th>
+          <th class="px-6 py-3">Color</th>
+          <th class="px-6 py-3">Talle</th>
+          <th class="px-6 py-3">Cantidad</th>
+          <th class="px-6 py-3">Subtotal</th>
+          <th class="px-6 py-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="sale-items-container">
+        <!-- Los items se agregarán dinámicamente con JavaScript -->
+      </tbody>
+    </table>
+
+    <div class="mt-4 text-right">
+      <span class="font-bold text-xl">Total: $</span>
+      <span class="total-amount font-bold text-xl">0</span>
+    </div>
+
+    <%= f.hidden_field :total, class: 'total-input' %>
+    <%= f.submit 'Crear Venta', class: 'mt-4 bg-blue-500 text-white px-4 py-2 rounded sale-submit-btn' %>
+  <% end %>
+</div>
+
+<template id="sale-item-template">
+  <tr class="sale-item" data-product-id="{product_id}">
+    <td class="px-6 py-4">
+      <img src="{image}" alt="{name}" class="w-16 h-16 object-cover">
+    </td>
+    <td class="px-6 py-4">{name}</td>
+    <td class="px-6 py-4">
+      <span class="unit-price">{price}</span>
+    </td>
+    <td class="px-6 py-4">{stock}</td>
+    <td class="px-6 py-4">{color}</td>
+    <td class="px-6 py-4">{size}</td>
+    <td class="px-6 py-4">
+      <div class="flex items-center">
+        <button type="button" class="decrement-btn px-2 bg-gray-200">-</button>
+        <input 
+          type="number" 
+          class="quantity-input w-16 text-center mx-2" 
+          value="1" 
+          min="1" 
+          max="{stock}"
+        >
+        <button type="button" class="increment-btn px-2 bg-gray-200">+</button>
+      </div>
+    </td>
+    <td class="px-6 py-4 subtotal">
+      <span>{price}</span>
+    </td>
+    <td class="px-6 py-4">
+      <button type="button" class="remove-item text-red-500">Eliminar</button>
+    </td>
+  </tr>
+</template>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const productSelect = document.getElementById('product-select');
+  const addProductBtn = document.querySelector('.add-product-btn');
+  const saleItemsContainer = document.querySelector('.sale-items-container');
+  const totalAmountElement = document.querySelector('.total-amount');
+  const saleForm = document.querySelector('.sale-form');
+  const itemTemplate = document.getElementById('sale-item-template');
+
+  function updateTotal() {
+    let total = 0;
+    document.querySelectorAll('.sale-item').forEach(item => {
+      const quantity = item.querySelector('.quantity-input').value;
+      const unitPrice = parseFloat(item.querySelector('.unit-price').textContent);
+      const subtotal = quantity * unitPrice;
+
+      item.querySelector('.subtotal span').textContent = subtotal.toFixed(2);
+      total += subtotal;
+    });
+
+    totalAmountElement.textContent = total.toFixed(2);
+    document.querySelector('.total-input').value = total.toFixed(2);
+  }
+
+  addProductBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const selectedOption = productSelect.options[productSelect.selectedIndex];
+    console.log("Selected Option:", selectedOption);
+    
+    if (!selectedOption || !selectedOption.value) return;
+
+    // Parse the product details from the data attribute
+    const product = JSON.parse(selectedOption.dataset.details);
+    console.log("Product Details:", product);
+
+    // Check if product already exists in the table
+    if (document.querySelector(`.sale-item[data-product-id="${product.id}"]`)) return;
+
+    // Create new row from template
+    const templateHTML = itemTemplate.innerHTML
+      .replace(/\{product_id\}/g, product.id)
+      .replace(/\{name\}/g, product.name)
+      .replace(/\{price\}/g, product.price)
+      .replace(/\{stock\}/g, product.stock)
+      .replace(/\{color\}/g, product.color)
+      .replace(/\{size\}/g, product.size)
+      .replace(/\{image\}/g, product.image || '');
+    
+    console.log("Template HTML:", templateHTML);
+    
+    const newRow = document.createElement('tr');
+    newRow.classList.add('sale-item'); // Añade la clase 'sale-item'
+    newRow.setAttribute('data-product-id', product.id);
+    newRow.innerHTML = templateHTML.trim();
+    
+    console.log("New Row:", newRow);
+  
+    // Modificación importante: seleccionar elementos dentro de newRow
+    const incrementBtn = newRow.querySelector('.increment-btn');
+    const decrementBtn = newRow.querySelector('.decrement-btn');
+    const quantityInput = newRow.querySelector('.quantity-input');
+    const removeBtn = newRow.querySelector('.remove-item');
+
+    console.log("Increment Button:", incrementBtn);
+    console.log("Decrement Button:", decrementBtn);
+    console.log("Quantity Input:", quantityInput);
+    console.log("Remove Button:", removeBtn);
+
+    // Verificar que los elementos existen antes de agregar event listeners
+    if (incrementBtn) {
+      incrementBtn.addEventListener('click', () => {
+        const currentValue = parseInt(quantityInput.value);
+        const maxStock = parseInt(quantityInput.max);
+        if (currentValue < maxStock) {
+          quantityInput.value = currentValue + 1;
+          updateTotal();
+        }
+      });
+    }
+
+    if (decrementBtn) {
+      decrementBtn.addEventListener('click', () => {
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+          quantityInput.value = currentValue - 1;
+          updateTotal();
+        }
+      });
+    }
+
+    if (quantityInput) {
+      quantityInput.addEventListener('change', updateTotal);
+    }
+
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        newRow.remove();
+        updateTotal();
+      });
+    }
+
+    // Append row and update total
+    saleItemsContainer.appendChild(newRow);
+    updateTotal();
+    productSelect.selectedIndex = 0;
+  });
+
+
+  saleForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const saleItems = [];
+    const saleItemsContainer = document.querySelector('.sale-items-container');
+    
+    // Validate that products are added
+    if (saleItemsContainer.children.length === 0) {
+      alert('Debe agregar al menos un producto a la venta');
+      return;
+    }
+
+    // Collect product information
+    saleItemsContainer.querySelectorAll('.sale-item').forEach(item => {
+      const productId = item.getAttribute('data-product-id');
+      const quantity = item.querySelector('.quantity-input').value;
+      const salePrice = item.querySelector('.unit-price').textContent;
+
+      saleItems.push({
+        product_id: productId,
+        quantity: quantity,
+        sale_price: salePrice
+      });
+    });
+
+    // Create hidden input with product information
+    const saleItemsInput = document.createElement('input');
+    saleItemsInput.type = 'hidden';
+    saleItemsInput.name = 'sale[sale_items]';
+    saleItemsInput.value = JSON.stringify(saleItems);
+    
+    console.log(saleItems);
+    console.log("input", saleItemsInput);
+    // Add input to form and submit
+    saleForm.appendChild(saleItemsInput);
+    saleForm.submit();
+  });
+});
+</script>

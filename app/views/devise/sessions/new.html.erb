@@ -1,0 +1,50 @@
+<div class="flex justify-center items-center mt-6 flex-col">
+  
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { style: "width:50%; border: solid 1px black; border-radius:30px; padding:20px;"}, class: "login-form") do |f| %>
+
+    <h2 class="text-center font-bold text-lg text-rosa-light mb-2">Iniciar Sesión</h2>
+    <div class="form-group">
+      <%= f.label :email, class: "block text-sm font-medium text-gray-900 mb-2"%>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2." %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, "Contraseña", class: "block text-sm font-medium text-gray-900 mb-2" %>
+      <%= f.password_field :password, autocomplete: "current-password", class: "form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2." %>
+    </div>
+
+    <div class=" form-group flex justify-center">
+      <%= f.submit "Iniciar Sesión", class: "bg-rosa-light text-white rounded-full
+            hover:bg-opacity-90 transition duration-300 ease-in-out 
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rosa-light w-1/2 mt-6 " %>
+    </div>
+  <% end %>
+
+</div>
+
+<% if flash[:alert] %>
+  <div id="alert" class="fixed top-0 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-50">
+    <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 shadow-lg w-full max-w-md">
+      <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <span class="sr-only">Info</span>
+      <div>
+        <span class="font-medium">Info alert!</span> <%= flash[:alert] %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hacer que la alerta desaparezca después de 3 segundos
+    setTimeout(() => {
+      const alert = document.getElementById('alert');
+      if (alert) {
+        alert.style.opacity = '0';
+        alert.style.transition = 'opacity 1s ease-in-out';
+        setTimeout(() => alert.remove(), 1000); // Eliminar el elemento después de que desaparezca
+      }
+    }, 3000); // Tiempo inicial antes de desaparecer (3 segundos)
+  </script>
+<% end %>

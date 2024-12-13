@@ -1,0 +1,63 @@
+<% def clean_error_message(message) %>
+  <% # Elimina el nombre del campo al principio del mensaje y mantiene el mensaje completo %>
+  <% message.sub(/^[^:]+:\s*/, '') %>
+<% end %>
+
+<div class="flex justify-center items-center">
+  <%= form_for(@user, url: registration_path(resource_name), html: { 
+    style: "width:50%; border: solid 1px black; border-radius:30px; padding:20px;" 
+  }) do |f| %>
+
+    <h1 class="text-center font-bold text-lg text-rosa-light mb-2">Editar Usuario</h1>
+    
+    <div class="mb-2">
+      <%= f.label :username, "Nombre de Usuario", class: "block text-sm font-medium text-gray-900 mb-2" %>
+      <%= f.text_field :username, placeholder: "Ingrese el nombre de usuario", 
+        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2" %>
+      <% @user.errors.full_messages_for(:username).each do |message| %>
+        <div class="text-red-500 text-sm mt-1"><%= clean_error_message(message) %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-2">
+      <%= f.label :email, "Correo electrónico", class: "mb-2 block text-sm font-medium text-gray-900" %>
+      <%= f.email_field :email, placeholder: "Ingrese el correo electrónico", 
+        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2" %>
+      <% @user.errors.full_messages_for(:email).each do |message| %>
+        <div class="text-red-500 text-sm mt-1"><%= clean_error_message(message) %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-2">
+      <%= f.label :phone, "Número de Teléfono", class: "mb-2 block text-sm font-medium text-gray-900" %>
+      <%= f.telephone_field :phone, placeholder: "Ingrese el número de teléfono", 
+        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2" %>
+      <% @user.errors.full_messages_for(:phone).each do |message| %>
+        <div class="text-red-500 text-sm mt-1"><%= clean_error_message(message) %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-2">
+      <%= f.label :password, "Contraseña", class: "mb-2 block text-sm font-medium text-gray-900" %>
+      <%= f.password_field :password, placeholder: "Ingrese la nueva contraseña", 
+        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2" %>
+      <% @user.errors.full_messages_for(:password).each do |message| %>
+        <div class="text-red-500 text-sm mt-1"><%= clean_error_message(message) %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-2">
+      <%= f.label :password_confirmation, "Confirmar Contraseña", class: "mb-2 block text-sm font-medium text-gray-900" %>
+      <%= f.password_field :password_confirmation, placeholder: "Confirme la nueva contraseña", 
+        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2" %>
+      <% @user.errors.full_messages_for(:password_confirmation).each do |message| %>
+        <div class="text-red-500 text-sm mt-1"><%= clean_error_message(message) %></div>
+      <% end %>
+    </div>
+
+    <div class="flex justify-center">
+      <%= f.submit "Editar Usuario", 
+        class: "bg-rosa-light text-white rounded-full hover:bg-opacity-90 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rosa-light w-1/2 mt-6" %>
+    </div>
+  <% end %>
+</div>

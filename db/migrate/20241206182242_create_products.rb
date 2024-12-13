@@ -6,7 +6,8 @@ class CreateProducts < ActiveRecord::Migration[8.0]
       t.decimal :unit_price
       t.integer :stock
       t.references :category, null: false, foreign_key: true
-      t.string :color
+      t.references :color, null: false, foreign_key: true
+      t.references :sub_category, null: false, foreign_key: true
       t.string :size
       t.date :entry_date
       t.date :last_modified_date

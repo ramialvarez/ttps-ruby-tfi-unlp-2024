@@ -4,6 +4,14 @@ class Sale < ApplicationRecord
   has_many :products, through: :sale_items
 
   # Validaciones
-  validates :sale_datetime, presence: true
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0 }
+
+  before_validation :set_default_on_delete, on: :create
+
+  private
+
+  def set_default_on_delete
+    self.is_delete = false
+  end
+
 end

@@ -1,0 +1,94 @@
+
+
+<div class="flex justify-center items-center ">
+
+    <%= form_with model: @product, html: { style: "width:50%; border: solid 1px black; border-radius:30px; padding:20px;"} do |form| %>
+        
+        <h1 class="text-center font-bold text-lg text-rosa-light mb-2">Nuevo Producto</h1>
+        <div class="mb-2">
+            <%= form.label :name, "Nombre del producto", class: "block text-sm font-medium text-gray-900 mb-2" %>
+            <%= form.text_field :name, placeholder: "Ingrese el nombre del producto", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2."%>
+            <% @product.errors.full_messages_for(:name).each do |message| %>
+                 <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :description, "Descripción", class: "mb-2 block text-sm font-medium text-gray-900" %>
+            <%= form.textarea :description, placeholder: "Ingrese la descripción del producto", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+            <% @product.errors.full_messages_for(:description).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :unit_price, "Precio por unidad", class: "mb-2 block text-sm font-medium text-gray-900"%>
+            <%= form.number_field :unit_price, placeholder: "Ingrese el precio por unidad del producto", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+            <% @product.errors.full_messages_for(:unit_price).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :stock, "Stock", class: "mb-2 block text-sm font-medium text-gray-900"%>
+            <%= form.number_field :stock, placeholder: "Ingrese el stock del producto", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+            <% @product.errors.full_messages_for(:stock).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+        </div>
+            
+        <div class="mb-2">
+            <%= form.label :color, "Color", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.collection_select :color_id, @colors, :id, :name, 
+            { prompt: "Selecciona un color" }, 
+            class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" %>
+            <% @product.errors.full_messages_for(:color).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>  
+        </div>
+        
+        <div class="mb-2">
+            <%= form.label :size, "Talle", class: "mb-2 block text-sm font-medium text-gray-900" %>
+            <%= form.textarea :size, placeholder: "Ingrese el talle del producto", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+            <% @product.errors.full_messages_for(:size).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+         </div>
+
+        <div class="mb-2">
+            <%= form.label :entry_date, "Fecha de ingreso al inventario", class: "mb-2 block text-sm font-medium text-gray-900"%>
+            <%= form.date_field :entry_date, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+        </div>
+        
+        <div class="mb-2">
+            <%= form.label :category, "Selecciona una categoria", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.collection_select :category_id, @categories, :id, :name, 
+            { prompt: "Selecciona una categoría" }, 
+            class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" %>
+            <% @product.errors.full_messages_for(:category).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :sub_categories, "Selecciona una sub categoria", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.collection_select :sub_category_id, @sub_categories, :id, :name, 
+            { prompt: "Selecciona una sub categoría" }, 
+            class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" %>
+            <% @product.errors.full_messages_for(:sub_categories).each do |message| %>
+                <div class="text-red-500 text-sm mt-1"><%= message %></div>
+            <% end %>
+        </div>
+
+        <div class="mb-2">
+            <%= form.label :images, "Imágenes del producto", class: "mb-2 block text-sm font-medium text-gray-900"%>
+            <%= form.file_field :images, multiple: true, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-rosa-light focus:border-rosa-light block w-full p-2"%>
+        </div>
+
+        <div class="flex justify-center" >
+            <%= form.submit "Crear Producto", class: "bg-rosa-light text-white rounded-full
+            hover:bg-opacity-90 transition duration-300 ease-in-out 
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rosa-light w-1/2 mt-6" %>
+        </div>
+    <% end %>
+</div>

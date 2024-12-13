@@ -1,0 +1,61 @@
+<h1 class="font-bold text-rosa-ligth text-3xl text-center mb-2">Listado de Productos de la venta seleccionada</h1>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3">Imagen</th>
+        <th scope="col" class="px-6 py-3">Nombre</th>
+        <th scope="col" class="px-6 py-3">Color</th>
+        <th scope="col" class="px-6 py-3">Talle</th>
+        <th scope="col" class="px-6 py-3">Cantidad</th>
+        <th scope="col" class="px-6 py-3">Total del producto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @items.each do |item| %>
+        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <%= image_tag item.product.images.first, class: 'rounded-t-lg max-w-xs max-h-24 object-contain' %>
+          </th>
+          <td class="px-6 py-4">
+            <span class="text-gray-800"><%= item.product.name %></span> 
+          </td>
+          <td class="px-6 py-4">
+            <span class="text-gray-800"><%= item.product.color.name %></span> 
+          </td>
+          <td class="px-6 py-4">
+            <span class="text-gray-800"><%= item.product.size %></span> 
+          </td>
+          <td class="px-6 py-4">
+            <span class="text-gray-800"><%= item.quantity %></span> 
+          </td>
+          <td class="px-6 py-4">
+            <span class="text-gray-800">
+              $<%= item.product.unit_price * item.quantity %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+
+      <!-- Fila para el total -->
+      <tr class="font-bold text-gray-900">
+        <td colspan="5" class="px-6 py-4 text-right">Total:</td>
+        <td class="px-6 py-4">
+          <span class="text-gray-800">
+            $<%= @sale.total %> <!-- Esto muestra el total de la venta -->
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="flex justify-center mt-6">
+  <%= link_to products_path do %>
+    <button type="button" class="flex items-center justify-center h-full gap-2 text-white bg-rosa-light hover:rosa-hover focus:outline-none focus:rosa-pale font-medium rounded-full text-sm px-2 py-2 text-center">
+      Volver al listado
+    </button>
+  <% end %>
+</div>

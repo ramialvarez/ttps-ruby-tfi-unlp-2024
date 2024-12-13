@@ -1,0 +1,120 @@
+<div class="container mx-auto p-6 min-h-screen flex items-center justify-center">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Carrousel de imágenes -->
+    <div class="flex justify-center items-center">
+        <div id="carousel" class="relative w-full h-96 max-w-3xl">
+        <% if @product.images.count > 1 %>
+            <div class="absolute inset-0 flex items-center justify-between">
+            <button class="bg-gray-800 text-white p-2 rounded-full" onclick="prevImage()">❮</button>
+            <button class="bg-gray-800 text-white p-2 rounded-full" onclick="nextImage()">❯</button>
+            </div>
+        <% end %>
+        <div class="flex overflow-hidden w-full h-full">
+            <% @product.images.each_with_index do |image, index| %>
+            <%= image_tag image, alt: "Product image #{index + 1}", class: "object-contain w-full h-full transition-all duration-500 transform", id: "image-#{index}" %>
+            <% end %>
+        </div>
+        </div>
+    </div>
+    
+    <!-- Información del producto -->
+    <div class="space-y-4">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= @product.name %></h2>
+      <p class="text-gray-700 dark:text-gray-400"><%= @product.description %></p>
+      
+      <div class="flex items-center gap-4">
+        <span class="text-xl font-semibold text-gray-900">Precio:</span>
+        <span class="text-xl font-semibold text-gray-900"><%= @product.unit_price %></span>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <span class="text-lg font-medium text-gray-800 dark:text-gray-300">Categoria:</span>
+        <span class="text-gray-700 dark:text-gray-400"><%= @product.category.name %></span>
+      </div>
+      
+      <% if @product.size %>
+        <div class="flex items-center gap-4">
+            <span class="text-lg font-medium text-gray-800 dark:text-gray-300">Talle:</span>
+            <span class="bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"><%= @product.size %></span>
+        </div>
+      <% end %>
+
+      <% if @product.size != "Sin color" %>
+        <div class="flex items-center gap-4">
+            <span class="text-lg font-medium text-gray-800 dark:text-gray-300">Color:</span>
+            <span id="badge-color" data-color="<%= @product.color.name %>" > <%= @product.color.name %></span>
+        </div>
+      <% end %>
+
+      <div class="flex items-center gap-4">
+        <span class="text-lg font-medium text-gray-800 dark:text-gray-300">Stock:</span>
+        <% if @product.stock > 0 %>
+          <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Disponible: <%= @product.stock %></span>
+        <% else %>
+          <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Sin stock</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentImageIndex = 0;
+
+  function showImage(index) {
+    const images = document.querySelectorAll("#carousel img");
+    const totalImages = images.length;
+
+    if (index >= totalImages) currentImageIndex = 0;
+    if (index < 0) currentImageIndex = totalImages - 1;
+
+    images.forEach((img, idx) => {
+      img.classList.add("opacity-0");
+      img.classList.remove("opacity-100");
+      if (idx === currentImageIndex) {
+        img.classList.remove("opacity-0");
+        img.classList.add("opacity-100");
+      }
+    });
+  }
+
+  function nextImage() {
+    currentImageIndex++;
+    showImage(currentImageIndex);
+  }
+
+  function prevImage() {
+    currentImageIndex--;
+    showImage(currentImageIndex);
+  }
+
+  // Inicializar el carrousel mostrando la primera imagen
+  showImage(currentImageIndex);
+
+  document.addEventListener("DOMContentLoaded", () => {
+        const colorClasses = {
+        "Amarillo": "bg-yellow-100 text-yellow-800 ",
+        "Verde": "bg-green-100 text-green-800 ",
+        "Azul": "bg-blue-100 text-blue-800",
+        "Negro": "bg-gray-800 text-gray-100 ",
+        "Blanco": "bg-gray-100 text-gray-800",
+        "Violeta": "bg-purple-100 text-purple-800",
+        "Rosa": "bg-pink-100 text-pink-800",
+        "Naranja": "bg-orange-100 text-orange-800 ",
+        "Celeste": "bg-cyan-100 text-cyan-800",
+        "Gris": "bg-gray-200 text-gray-800"
+      };
+
+      const badgeContainer = document.getElementById("badge-color");
+      const productColor = badgeContainer.dataset.color;
+
+      console.log(badgeContainer)
+      console.log(productColor)
+
+      badgeContainer.className = `${colorClasses[productColor]} text-xs font-medium px-2.5 py-0.5 rounded-full`;
+  });
+
+</script>
+
+

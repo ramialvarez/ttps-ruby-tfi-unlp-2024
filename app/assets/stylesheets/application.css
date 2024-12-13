@@ -7,5 +7,5 @@
     font-style: semibold;
     font-weight: 800;
     font-display: swap;
-    src: asset-url("/fonts/CalSans-SemiBold.woff2") format("woff2");
+    src: url("CalSans-SemiBold.woff2") format("woff2");
  }
