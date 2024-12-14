@@ -55,8 +55,8 @@ Avivas es una aplicación web de comercio electrónico desarrollada como proyect
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu_usuario/avivas.git
-cd avivas
+git clone https://github.com/ramialvarez/ttps-ruby-tfi-unlp-2024
+cd ttps-ruby-tfi-unlp-2024
 ```
 
 ### 2. Instalar Dependencias

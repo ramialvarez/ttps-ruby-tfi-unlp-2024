@@ -51,17 +51,6 @@ User.create!(
   active: true,
 )
 
-User.create!(
-  username: "Gerente Bloqueado",
-  email: "gerente2@gmail.com",
-  phone: "22414343",
-  password: "123456",
-  original_password: "123456",
-  role: 1,
-  entry_date: Date.today,
-  active: false,
-)
-
 # Crear categorías
 categories = [
   { name: "Zapatillas" },
