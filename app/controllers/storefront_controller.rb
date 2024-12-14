@@ -2,7 +2,7 @@ class StorefrontController < ApplicationController
     
     def index
         # Iniciar con todos los productos
-        @products = Product.page(params[:page]).per(6)
+        @products = Product.where(deleted_at: nil).page(params[:page]).per(6)
     
         # Filtro por categorías (múltiples)
         if params[:category_ids].present?
