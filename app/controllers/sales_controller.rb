@@ -3,7 +3,7 @@ class SalesController < ApplicationController
   before_action :authenticate_user!
   
   def index
-    @sales = Sale.page(params[:page]).per(1)
+    @sales = Sale.page(params[:page]).per(2)
   end
 
   def show 
@@ -64,7 +64,7 @@ class SalesController < ApplicationController
         product.update(stock: product.stock + item['quantity'].to_i)
     end
 
-    @sale.update(is_delete: false)
+    @sale.update(is_delete: true)
 
     redirect_to sales_path, notice: 'Venta eliminada exitosamente.'
   end

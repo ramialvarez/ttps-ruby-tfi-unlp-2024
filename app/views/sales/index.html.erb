@@ -23,7 +23,7 @@
           <td class="px-6 py-4">
             <span class="text-gray-800"><%= sale.user.username %></span> 
           </td>
-          <% if sale.is_delete %>
+          <% if !sale.is_delete %>
                 <td class="px-6 py-4">
                     <span class="text-green-800">Vigente</span> 
                 </td>

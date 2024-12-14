@@ -1,9 +1,9 @@
 class ProductsController < ApplicationController
     
-    before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:edit, :new, :create, :update, :destroy]
 
     def index
-        @products = Product.where(deleted_at: nil).page(params[:page]).per(1)
+        @products = Product.where(deleted_at: nil).page(params[:page]).per(2)
     end
 
     def show

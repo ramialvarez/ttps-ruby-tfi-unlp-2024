@@ -73,6 +73,8 @@ category_objects = categories.map do |category|
   Category.create!(category)
 end
 
+
+
 sub_categories = [
   { name: "Running"},
   { name: "Padel"},

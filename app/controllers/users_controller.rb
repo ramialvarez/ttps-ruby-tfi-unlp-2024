@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     before_action :authorize_user, only: [:index, :show]  # Verifica si tiene el rol adecuado
 
     def index
-      @users = User.page(params[:page]).per(1)
+      @users = User.page(params[:page]).per(2)
     end
 
     def show
